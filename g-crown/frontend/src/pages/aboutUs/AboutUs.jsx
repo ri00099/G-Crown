@@ -1,117 +1,129 @@
 import React from "react";
-import { Award, Heart, Sparkles, Users } from "lucide-react";
+import heroImg from "../../assets/aboutUs/heroImage.png";
+import earRing from "../../assets/aboutUs/earRing.png";
 
-const AboutUs = () => {
-  const values = [
-    {
-      icon: Award,
-      title: "Craftsmanship",
-      description: "Every piece is handcrafted by master artisans with decades of experience",
-    },
-    {
-      icon: Heart,
-      title: "Quality",
-      description: "We use only the finest materials and gemstones in our creations",
-    },
-    {
-      icon: Sparkles,
-      title: "Elegance",
-      description: "Timeless designs that celebrate your unique style and personality",
-    },
-    {
-      icon: Users,
-      title: "Heritage",
-      description: "A legacy of excellence passed down through generations",
-    },
-  ];
-
+const GCrownJewellerySection = () => {
   return (
-    <div className="min-h-screen bg-[#FFF9EA]">
-      {/* Hero Section */}
-      <section className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] bg-gradient-to-br from-[#0F231C] to-[#1C3A2C] flex items-center justify-center">
-        <div className="text-center px-4 sm:px-6 max-w-4xl mx-auto">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-['Cormorant_Garamond'] text-[#CBA135] mb-4 sm:mb-6">
-            About G-Crown
-          </h1>
-          <p className="text-sm sm:text-base md:text-lg text-[#EFDFB7] leading-relaxed">
-            Crafting timeless elegance since 2024. We bring together traditional artistry and contemporary design to create jewelry that tells your unique story.
-          </p>
+    <div className="bg-[#fff8e8] font-cormorant selection:bg-[#0F241A] selection:text-[#EFDFB7] overflow-x-hidden">
+      
+      {/* --- SECTION 1: HERO & BRANDING --- */}
+      <section className="mx-auto max-w-7xl px-6 py-16 md:px-12 lg:px-20 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+        
+        {/* Left: Branded Image Card */}
+        <div className="relative group w-full max-w-xl mx-auto lg:mx-0">
+          <div className="border-[10px] border-[#0F241A] bg-white shadow-2xl transition-transform duration-700 hover:scale-[1.01]">
+            <img
+              src={heroImg}
+              alt="G-Crown Bracelet"
+              className="w-full aspect-square object-cover block"
+            />
+          </div>
+        </div>
+
+        {/* Right: Intro Text & Branded Geometric Element */}
+        <div className="flex flex-col gap-12 lg:gap-16">
+          <div className="flex flex-col md:flex-row justify-between items-start gap-10">
+            <p className="text-xl lg:text-2xl text-[#1a1a1a] leading-relaxed max-w-md italic font-medium">
+              "Born from Graphura’s passion for design and precision, G-Crown
+              Jewellery draws inspiration from royalty and fine craftsmanship to
+              create timeless pieces of luxury."
+            </p>
+
+            {/* Figma Pixel Perfect: Inner Alignment Ring Logic */}
+            <div className="relative w-28 h-32 lg:w-[148px] lg:h-[168px] bg-[#0F241A] ring-2 ring-[#EFDFB7] ring-inset outline outline-2 outline-[#0F241A] flex-shrink-0 shadow-lg" />
+          </div>
+
+          {/* Luxury Gradient Banner */}
+          <div className="w-full h-24 lg:h-32 bg-gradient-to-r from-[#B1924E] via-[#E9D392] to-[#B1924E] shadow-sm" />
         </div>
       </section>
 
-      {/* Story Section */}
-      <section className="py-12 sm:py-16 md:py-20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10 md:gap-12 items-center">
-            <div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-['Cormorant_Garamond'] text-[#1C3A2C] mb-4 sm:mb-6">
-                Our Story
-              </h2>
-              <p className="text-sm sm:text-base md:text-lg text-[#1C3A2C] mb-4 leading-relaxed">
-                G-Crown Jewellers by Graphura was born from a vision to create jewelry that transcends trends and becomes a cherished part of your legacy. Every piece we create is a testament to our commitment to excellence, combining traditional craftsmanship with modern sensibilities.
-              </p>
-              <p className="text-sm sm:text-base md:text-lg text-[#1C3A2C] leading-relaxed">
-                We believe that jewelry is more than an accessory—it's a reflection of who you are, a celebration of your milestones, and a treasure to be passed down through generations.
-              </p>
-            </div>
-            <div className="h-[300px] sm:h-[400px] md:h-[500px] bg-gradient-to-br from-[#1C3A2C] to-[#0F231C] rounded-xl sm:rounded-2xl overflow-hidden">
+      {/* --- SECTION 2: HERITAGE ARCH COMPOSITION --- */}
+      <section className="mx-auto max-w-7xl px-6 py-16 md:px-12 lg:px-20 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+        
+        {/* Left: Narrative content */}
+        <div className="flex flex-col gap-8 text-[#1a1a1a] max-w-xl">
+          <div className="space-y-6 text-lg lg:text-[22px] leading-[1.7] font-light">
+            <p>
+              G-Crown Jewellery by Graphura was born from a passion for design,
+              precision, and timeless elegance. Rooted in Graphura’s commitment
+              to excellence, G-Crown represents the perfect harmony.
+            </p>
+            <p>
+              Each piece of jewellery is thoughtfully designed and meticulously
+              crafted to celebrate life’s most meaningful moments. From refined
+              everyday elegance to statement creations.
+            </p>
+            <p>
+              At G-Crown, we believe jewellery is more than an accessory—it is
+              an expression of identity, confidence, and legacy. Every detail
+              reflects our dedication to quality.
+            </p>
+            <p className="font-medium">
+              Guided by trust, transparency, and innovation, G-Crown Jewellery
+              by Graphura continues to craft designs that honor tradition.
+            </p>
+          </div>
+        </div>
+
+        {/* Right: Responsive Double-Arch Framework */}
+        <div className="relative flex justify-center lg:justify-end items-center min-h-[500px] lg:min-h-[650px]">
+          <div className="relative w-full max-w-[360px] lg:max-w-[480px] aspect-[4/5.5]">
+            
+            {/* 1. Base Green Arch */}
+            <div className="absolute inset-0 bg-[#1C3A2C] rounded-t-full shadow-2xl" />
+
+            {/* 2. Gold Offset Shape (Replaced ml-10 with proportional positioning) */}
+            <div className="absolute bottom-0 right-0 w-[85%] h-[90%] bg-[#CBA135] rounded-t-full " />
+
+            {/* 3. Image Arch (Clipped & Bordered) */}
+            <div className="absolute bottom-0 ml-10 left-0 w-[86%] h-[87%] bg-gray-100 rounded-t-full overflow-hidden border-[2px] border-[#0F241A] shadow-inner">
               <img
-                src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&auto=format&fit=crop"
-                alt="Our Story"
-                className="w-full h-full object-cover opacity-80"
+                src={earRing}
+                alt="Earring Detail"
+                className="w-full h-full object-cover transition-transform duration-1000 hover:scale-110"
               />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Values Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-[#F8F5F0]">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-['Cormorant_Garamond'] text-center text-[#1C3A2C] mb-8 sm:mb-12">
-            Our Values
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-            {values.map((value, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center hover:shadow-lg transition-shadow"
-              >
-                <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 sm:mb-6 bg-[#1C3A2C] rounded-full flex items-center justify-center">
-                  <value.icon className="w-8 h-8 sm:w-10 sm:h-10 text-[#CBA135]" />
-                </div>
-                <h3 className="text-xl sm:text-2xl font-bold font-['Cormorant_Garamond'] text-[#1C3A2C] mb-3 sm:mb-4">
-                  {value.title}
-                </h3>
-                <p className="text-sm sm:text-base text-[#1C3A2C] leading-relaxed">
-                  {value.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* --- FOOTER: NEWSLETTER --- */}
+      <footer className="mb-10 relative overflow-hidden bg-[linear-gradient(135deg,#08221B,#4F7B62,#08221B)] py-24 px-6 mt-12">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08),transparent_70%)]" />
 
-      {/* Mission Section */}
-      <section className="py-12 sm:py-16 md:py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-['Cormorant_Garamond'] text-[#1C3A2C] mb-6 sm:mb-8">
-            Our Mission
-          </h2>
-          <p className="text-base sm:text-lg md:text-xl text-[#1C3A2C] leading-relaxed mb-6 sm:mb-8">
-            To create jewelry that celebrates your individuality, honors your milestones, and becomes a cherished part of your story. We are committed to excellence in every detail, from the selection of materials to the final polish.
-          </p>
-          <div className="h-[200px] sm:h-[300px] md:h-[400px] bg-gradient-to-br from-[#1C3A2C] to-[#0F231C] rounded-xl sm:rounded-2xl overflow-hidden">
-            <img
-              src="https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=800&auto=format&fit=crop"
-              alt="Our Mission"
-              className="w-full h-full object-cover opacity-70"
-            />
+        <div className="relative mx-auto max-w-5xl text-center space-y-10">
+          <div className="space-y-4">
+            <span className="block text-sm font-bold uppercase tracking-[0.4em] text-[#EFDFB7]">
+              OUR NEWSLETTER
+            </span>
+            <h2 className="mx-auto max-w-4xl text-[34px] leading-tight md:text-[52px] text-[#EFDFB7] font-light">
+              Subscribe To Our Newsletter To Get <br className="hidden md:block" />
+              Updates To Our Latest Collection
+            </h2>
+            <p className="mx-auto max-w-2xl text-lg font-light text-[#EFE3C2] opacity-90">
+              Get 20% Off On Your First Order Just By Subscribing To Our Newsletter
+            </p>
           </div>
+
+          <form className="mx-auto flex max-w-2xl flex-col sm:flex-row items-stretch gap-10 sm:gap-0  border-white/10 p-1.5   transition-all hover:border-[#EFDFB7]/30">
+            <input
+              type="email"
+              placeholder="Enter Email Address"
+              required
+              className="w-full bg-white px-8 py-4 text-lg text-[#0F241A] placeholder:text-[#8A8A8A] outline-none font-sans"
+            />
+            <button
+              type="submit"
+              className="bg-[#C9A24D] ml-2 border-y-2 border-x-2 border-amber-50 px-12 py-4 text-sm font-bold uppercase tracking-widest text-[#0F241A] transition-all hover:bg-[#D8B45A] hover:shadow-lg active:scale-[0.98]"
+            >
+              Subscribe
+            </button>
+          </form>
         </div>
-      </section>
+      </footer>
     </div>
   );
 };
 
-export default AboutUs;
+export default GCrownJewellerySection;

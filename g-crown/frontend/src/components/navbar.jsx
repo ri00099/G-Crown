@@ -87,9 +87,9 @@ export default function Navbar() {
 
             {/* DESKTOP ICONS */}
             <div className="hidden lg:flex items-center gap-3 ">
-              <IconButton Icon={Heart} />
-              <IconButton Icon={ShoppingCart} />
-              <IconButton Icon={MapPin} />
+              <IconButton Icon={Heart} onClick={() => navigate("/favourites")} />
+              <IconButton Icon={ShoppingCart} onClick={() => navigate("/cart")} />
+              <IconButton Icon={MapPin} onClick={() => navigate("/track-order")} />
               {/* PROFILE ICON */}
               <IconButton
                 Icon={User}
@@ -144,6 +144,7 @@ export default function Navbar() {
             { label: "Occasions", href: "/occasions" },
             { label: "New Arrivals", href: "/new-arrivals" },
             { label: "Store", href: "/store" },
+            { label: "Track Order", href: "/track-order" },
           ].map((item) => (
             <a
               key={item.label}

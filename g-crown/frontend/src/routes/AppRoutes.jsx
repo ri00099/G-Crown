@@ -15,6 +15,9 @@ import AboutUs from "../pages/aboutUs/AboutUs.jsx";
 import ProductDetails from "../pages/ProductDetails/ProductDetails.jsx";
 import Profile from "./../pages/Profile/Profile.jsx"
 
+import TrackingOrder from '../pages/trackOrder/TrackOrder.jsx'
+import TrackingForm from '../pages/trackOrder/TrackingForm.jsx'
+
 export default function AppRoutes() {
   const location = useLocation();
 
@@ -39,6 +42,8 @@ export default function AppRoutes() {
         <Route path="/store" element={<Store />} />
         <Route path="/about" element={<AboutUs />} />
 
+        <Route path="/track-order" element={<TrackingForm />} />
+        <Route path="/track-id" element={<TrackingOrder />} />
     
         <Route path="/profile" element={<Profile />} />
       </Routes>

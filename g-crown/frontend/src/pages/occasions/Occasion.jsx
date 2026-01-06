@@ -1,127 +1,315 @@
-import React from "react";
-import { ArrowRight } from "lucide-react";
+     import React, { useState, useMemo, useCallback } from "react";
+    import { ChevronDown, X, SlidersHorizontal } from "lucide-react";
+    import { FilterSidebar } from "../../components/filterSection";
+    // import earingImg from "../../assets/collectionPage/ear-ring.png";
+    import { useNavigate } from "react-router-dom";
+    import { allProducts } from "./MockData";
 
-const Occasion = () => {
-  const occasions = [
-    {
-      id: 1,
-      title: "Weddings",
-      description: "Elegant bridal sets and wedding jewelry",
-      image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&auto=format&fit=crop",
-      count: "120+ Designs",
-    },
-    {
-      id: 2,
-      title: "Festivals",
-      description: "Traditional and contemporary festive collections",
-      image: "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=800&auto=format&fit=crop",
-      count: "85+ Designs",
-    },
-    {
-      id: 3,
-      title: "Anniversaries",
-      description: "Celebrate milestones with timeless pieces",
-      image: "https://images.unsplash.com/photo-1506630448388-4e6c5f5a1e3b?w=800&auto=format&fit=crop",
-      count: "60+ Designs",
-    },
-    {
-      id: 4,
-      title: "Engagements",
-      description: "Stunning rings and sets for your special moment",
-      image: "https://images.unsplash.com/photo-1611591437281-8bfd43f0d0a6?w=800&auto=format&fit=crop",
-      count: "95+ Designs",
-    },
-    {
-      id: 5,
-      title: "Birthdays",
-      description: "Perfect gifts to celebrate another year",
-      image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&auto=format&fit=crop",
-      count: "70+ Designs",
-    },
-    {
-      id: 6,
-      title: "Corporate Events",
-      description: "Sophisticated pieces for professional occasions",
-      image: "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=800&auto=format&fit=crop",
-      count: "45+ Designs",
-    },
-  ];
 
-  return (
-    <div className="min-h-screen bg-[#FFF9EA]">
-      {/* Hero Section */}
-      <section className="relative h-[40vh] sm:h-[50vh] md:h-[60vh] bg-gradient-to-br from-[#0F231C] to-[#1C3A2C] flex items-center justify-center">
-        <div className="text-center px-4 sm:px-6">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-['Cormorant_Garamond'] text-[#CBA135] mb-4">
-            Jewelry for Every Occasion
-          </h1>
-          <p className="text-sm sm:text-base md:text-lg text-[#EFDFB7] max-w-2xl mx-auto">
-            Find the perfect piece for every moment that matters
-          </p>
-        </div>
-      </section>
+    import shippingIcon from "../../assets/NewArrivalAssets/logos/la_shipping-fast.png";
+    import paymentIcon from "../../assets/NewArrivalAssets/logos/fluent_payment-32-regular.png";
+    import supportIcon from "../../assets/NewArrivalAssets/logos/streamline-plump_customer-support-7.png";
 
-      {/* Occasions Grid */}
-      <section className="py-8 sm:py-12 md:py-16 lg:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {occasions.map((occasion) => (
-              <div
-                key={occasion.id}
-                className="group relative overflow-hidden rounded-xl sm:rounded-2xl bg-[#1C3A2C] hover:shadow-2xl transition-all duration-300 cursor-pointer"
-              >
-                {/* Image */}
-                <div className="relative h-[250px] sm:h-[300px] md:h-[350px] overflow-hidden">
-                  <img
-                    src={occasion.image}
-                    alt={occasion.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#1C3A2C]/95 via-[#1C3A2C]/60 to-transparent" />
-                  
-                  {/* Badge */}
-                  <div className="absolute top-4 right-4 bg-[#CBA135] px-3 py-1 rounded-full">
-                    <span className="text-xs sm:text-sm font-semibold text-[#0F231C]">
-                      {occasion.count}
-                    </span>
+    import bannerImage from '../../assets/occassions/bannerImg.jpg'
+
+    const Collections = () => {
+      
+
+      const MIN_LIMIT = 2500;
+      const MAX_LIMIT = 600000;
+
+      // 2. States
+      const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+      const [selectedCategories, setSelectedCategories] = useState([]);
+      const [selectedMaterials, setSelectedMaterials] = useState([]);
+      const [selectedColors, setSelectedColors] = useState([]);
+      const [priceRange, setPriceRange] = useState([MIN_LIMIT, MAX_LIMIT]);
+      const [sortBy, setSortBy] = useState("default");
+
+      // 3. Handlers
+      const toggleCategory = useCallback((cat) => {
+        setSelectedCategories(prev => prev.includes(cat) ? prev.filter(i => i !== cat) : [...prev, cat]);
+      }, []);
+
+      const toggleMaterial = useCallback((mat) => {
+        setSelectedMaterials(prev => prev.includes(mat) ? prev.filter(i => i !== mat) : [...prev, mat]);
+      }, []);
+
+      const toggleColor = useCallback((col) => {
+        setSelectedColors(prev => prev.includes(col) ? prev.filter(i => i !== col) : [...prev, col]);
+      }, []);
+
+      const handleMinPriceChange = (e) => {
+        const val = Math.min(Number(e.target.value), priceRange[1] - 1000);
+        setPriceRange([val, priceRange[1]]);
+      };
+
+      const handleMaxPriceChange = (e) => {
+        const val = Math.max(Number(e.target.value), priceRange[0] + 1000);
+        setPriceRange([priceRange[0], val]);
+      };
+
+      const clearAll = () => {
+        setSelectedCategories([]);
+        setSelectedMaterials([]);
+        setSelectedColors([]);
+        setPriceRange([MIN_LIMIT, MAX_LIMIT]);
+        setSortBy("default");
+      };
+
+      // 4. Filtering Logic
+      const filteredProducts = useMemo(() => {
+        let result = allProducts.filter(product => {
+          const categoryMatch = selectedCategories.length === 0 || selectedCategories.includes(product.category);
+          const materialMatch = selectedMaterials.length === 0 || selectedMaterials.includes(product.material);
+          const colorMatch = selectedColors.length === 0 || selectedColors.includes(product.color);
+          const priceMatch = product.price >= priceRange[0] && product.price <= priceRange[1];
+          return categoryMatch && materialMatch && colorMatch && priceMatch;
+        });
+
+        if (sortBy === "lowToHigh") result.sort((a, b) => a.price - b.price);
+        else if (sortBy === "highToLow") result.sort((a, b) => b.price - a.price);
+
+        return result;
+      }, [allProducts, selectedCategories, selectedMaterials, selectedColors, priceRange, sortBy]);
+
+      return (
+        <div className="bg-[#FFF9E9] min-h-screen font-sans text-[#2D2D2D]">
+
+                <section className="w-full relative overflow-hidden">
+                  <div className="w-full h-[220px] sm:h-[320px] md:h-[400px] lg:h-[500px] xl:h-[600px]">
+                    <img src={bannerImage} alt="New Arrivals" className="w-full h-full object-cover" loading="eager" />
                   </div>
-                </div>
+                </section>
+          {/* Header */}
+          <header className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16 pt-10 pb-4 border-b border-gray-200">
+            <h1 className="text-2xl sm:text-3xl font-serif text-[#B39055] tracking-wide uppercase flex items-center gap-3">
+              Collections 
+              <span className="text-[#1C3A2C] text-2xl hidden sm:inline">|</span>
+              <span className="text-gray-500 text-sm font-sans lowercase"> {filteredProducts.length} Designs found</span>
+            </h1>
+          </header>
 
-                {/* Content */}
-                <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 md:p-8">
-                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold font-['Cormorant_Garamond'] text-white mb-2 sm:mb-3">
-                    {occasion.title}
-                  </h3>
-                  <p className="text-sm sm:text-base text-[#EFDFB7] mb-4 sm:mb-6">
-                    {occasion.description}
-                  </p>
-                  <button className="flex items-center gap-2 text-xs sm:text-sm font-semibold font-['Montserrat'] text-[#CBA135] uppercase tracking-wider hover:text-white transition-colors group-hover:translate-x-2 transition-transform duration-300">
-                    Explore
-                    <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
+          <main className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16 py-8">
+            {/* Controls Bar */}
+            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-8 w-full lg:w-auto">
+                <div className="flex items-center justify-between w-full sm:w-auto gap-4">
+                  <h2 className="text-[24px] sm:text-[28px] lg:text-[32px] font-bold font-cormorant text-[#1C3A2C]">Filter Options</h2>
+                  <button 
+                    onClick={() => setIsMobileFilterOpen(true)}
+                    className="lg:hidden flex items-center gap-2 px-4 py-2 bg-[#1C3A2C] text-white rounded-md font-montserrat text-[13px] active:scale-95 transition-all"
+                  >
+                    <SlidersHorizontal size={14} /> Filters
                   </button>
                 </div>
+                <p className="hidden sm:block text-[16px] text-[#1C3A2C]">
+                  Showing 1-{filteredProducts.length} of {allProducts.length} results
+                </p>
               </div>
-            ))}
+
+              <div className="flex items-center gap-3 w-full sm:w-auto">
+                <span className="text-[14px] lg:text-[18px] font-cormorant text-[#1C3A2C] whitespace-nowrap">Sort by:</span>
+                <div className="relative flex-1 sm:flex-initial">
+                  <select 
+                    value={sortBy} 
+                    onChange={(e) => setSortBy(e.target.value)} 
+                    className="w-full sm:w-[200px] lg:w-[240px] h-[40px] lg:h-[48px] bg-[#E9E1C6] border border-[#1C3A2C] rounded px-3 text-sm outline-none cursor-pointer appearance-none"
+                  >
+                    <option value="default">Default Sorting</option>
+                    <option value="lowToHigh">Price: Low to High</option>
+                    <option value="highToLow">Price: High to Low</option>
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" />
+                </div>
+              </div>
+            </div>
+
+            {/* Active Filters Row */}
+            <div className="flex flex-wrap items-center gap-3 mb-0 p-3  rounded-lg">
+              <span className="text-[15px] font-[600] uppercase text-[#1C3A2C]">Active Filter</span>
+              {[...selectedCategories, ...selectedMaterials, ...selectedColors].map(filter => (
+                <span key={filter} className="bg-[#195C4A] text-white px-3 py-1 text-[10px] flex items-center gap-2 uppercase">
+                  {filter} 
+                  <button onClick={() => {
+                    if(selectedCategories.includes(filter)) toggleCategory(filter);
+                    else if(selectedMaterials.includes(filter)) toggleMaterial(filter);
+                    else toggleColor(filter);
+                  }}>✕</button>
+                </span>
+              ))}
+              {(selectedCategories.length > 0 || selectedColors.length > 0 || selectedMaterials.length > 0) && (
+                <button onClick={clearAll} className="text-xs underline text-gray-400 ml-2">Clear ALL</button>
+              )}
+            </div>
+
+            {/* Layout with Sidebar */}
+            <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+              
+              <FilterSidebar
+                isOpen={isMobileFilterOpen}
+                onClose={() => setIsMobileFilterOpen(false)}
+                categories={['Bracelets', 'Rings', 'Earrings', 'Necklaces']}
+                selectedCategories={selectedCategories}
+                onToggleCategory={toggleCategory}
+                materials={['Gold', 'Platinum', 'Rose Gold', 'Diamond Jewelry', 'Pearl']}
+                selectedMaterials={selectedMaterials}
+                onToggleMaterial={toggleMaterial}
+                colors={['Grey', 'Green', 'Orange', 'Blue', 'White']}
+                selectedColors={selectedColors}
+                onToggleColor={toggleColor}
+                priceRange={priceRange}
+                onPriceChange={{ onMinChange: handleMinPriceChange, onMaxChange: handleMaxPriceChange }}
+                minPrice={MIN_LIMIT}
+                maxPrice={MAX_LIMIT}
+                priceStep={1000}
+              />
+
+
+              {/* Product Grid */}
+              <section className="flex-1 min-w-0">
+                <div className="flex justify-between px-2 my-5">
+
+                <h1 className="text-3xl mb-5 text-[#C58B0E] font-cormorant">Daily Wear</h1>
+                <button className="bg-[#195C4A] text-white px-3 my-3 text-[10px] flex items-center gap-2 uppercase text-[15px] font-[300] uppercase text-[#1C3A2C font-cormorant">Show more</button>
+                </div>
+                
+                {filteredProducts.length > 0 ? (
+                  <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-6 lg:gap-8">
+                    {filteredProducts.map(product => (
+                      <ProductCard key={product.id} product={product} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-20 bg-white/30 rounded-2xl border-2 border-dashed border-[#CBA135]/30">
+                    <p className="text-gray-500 italic font-serif text-lg">No designs match your current filters.</p>
+                    <button onClick={clearAll} className="mt-4 text-[#B39055] font-bold underline">Show All Designs</button>
+                  </div>
+                )}
+
+
+                {/* sdfdsf */}
+
+                <div className="flex justify-between px-2 my-5 mt-10">
+
+                <h1 className="text-3xl mb-5 text-[#C58B0E] font-cormorant">Bridal Wear</h1>
+                <button className="bg-[#195C4A] text-white px-3 my-3 text-[10px] flex items-center gap-2 uppercase text-[15px] font-[300] uppercase text-[#1C3A2C font-cormorant">Show more</button>
+                </div>
+                
+                {filteredProducts.length > 0 ? (
+                  <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-6 lg:gap-8">
+                    {filteredProducts.map(product => (
+                      <ProductCard key={product.id} product={product} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-20 bg-white/30 rounded-2xl border-2 border-dashed border-[#CBA135]/30">
+                    <p className="text-gray-500 italic font-serif text-lg">No designs match your current filters.</p>
+                    <button onClick={clearAll} className="mt-4 text-[#B39055] font-bold underline">Show All Designs</button>
+                  </div>
+                )}
+
+
+
+                {/* dfef */}
+
+                <div className="flex justify-between px-2 my-5 mt-10">
+
+                <h1 className="text-3xl mb-5 text-[#C58B0E] font-cormorant">Festive Wear</h1>
+                <button className="bg-[#195C4A] text-white px-3 my-3 text-[10px] flex items-center gap-2 uppercase text-[15px] font-[300] uppercase text-[#1C3A2C font-cormorant">Show more</button>
+                </div>
+                
+                {filteredProducts.length > 0 ? (
+                  <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-6 lg:gap-8">
+                    {filteredProducts.map(product => (
+                      <ProductCard key={product.id} product={product} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-20 bg-white/30 rounded-2xl border-2 border-dashed border-[#CBA135]/30">
+                    <p className="text-gray-500 italic font-serif text-lg">No designs match your current filters.</p>
+                    <button onClick={clearAll} className="mt-4 text-[#B39055] font-bold underline">Show All Designs</button>
+                  </div>
+                )}
+              </section>
+            </div>
+          </main>
+
+          {/* Features Bar */}
+          <section className="bg-[#FFF9E9] px-4 sm:px-6 lg:px-12 xl:px-16 py-10 lg:py-16">
+            <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+              <FeatureCard icon={shippingIcon} title="Free Shipping" description="Free Shipping for Order above ₹ 2,000" />
+              <FeatureCard icon={paymentIcon} title="Flexible Payment" description="Multiple Secure payment Options" />
+              <FeatureCard icon={supportIcon} title="24x7 Support" description="We Support online all days" />
+            </div>
+          </section>
+        </div>
+      );
+    };
+
+
+
+    export const ProductCard = ({ product }) => {
+        const navigate = useNavigate();
+      return (
+
+        <div className="bg-[#FFF9E9] relative rounded-md group cursor-pointer"  onClick={() => navigate(`/product/${product.id}`, { state: { product } })}>
+          {product.bestseller && (
+            <div className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-[#CBA135] text-[#FFFFFF] text-[8px] sm:text-[10px] px-2 py-0.5 font-normal z-10 tracking-widest">
+              BESTSELLER
+            </div>
+          )}
+          <button className="absolute top-2 right-2 sm:top-4 sm:right-4 text-gray-300 z-10 bg-white p-2 rounded-full shadow-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="w-3 h-3 fill-[#08221B] hover:fill-red-500 transition-colors">
+              <path d="M241 87.1l15 20.7 15-20.7C296 52.5 336.2 32 378.9 32 452.4 32 512 91.6 512 165.1l0 2.6c0 112.2-139.9 242.5-212.9 298.2-12.4 9.4-27.6 14.1-43.1 14.1s-30.8-4.6-43.1-14.1C139.9 410.2 0 279.9 0 167.7l0-2.6C0 91.6 59.6 32 133.1 32 175.8 32 216 52.5 241 87.1z" />
+            </svg>
+          </button>
+
+          <div className="h-48 sm:h-64 bg-gray-100 mb-4 overflow-hidden rounded-t-md">
+            <img 
+              src={product.image} 
+              alt={product.name} 
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 " 
+            />
+          </div>
+
+          <div className="px-1 sm:px-4 pb-4">
+            <div className="text-[#CBA135] text-xs sm:text-md mb-0.5">
+              ★★★★★ <span className="text-[#08221B] text-[10px] sm:text-[13px]">({product.reviews})</span>
+            </div>
+            <h3 className="font-serif text-[12px] sm:text-sm mb-0.5 text-[#08221B] line-clamp-1">{product.name}</h3>
+            <p className="text-[9px] sm:text-[10px] text-[#37654B] mb-1">{product.material} | {product.color}</p>
+            
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 mb-4">
+              <div>
+                <h2 className="font-bold text-[#08221B] text-sm sm:text-xl">₹{product.price.toLocaleString()}</h2>
+                <h2 className="text-[10px] sm:text-xs text-[#37654B] line-through">₹{product.oldPrice.toLocaleString()}</h2>
+              </div>
+              <div className="w-fit px-2 py-0.5 text-[8px] sm:text-[10px] bg-[#EF4444] text-white font-bold rounded">SAVE 10%</div>
+            </div>
+            
+            <button className="w-full bg-[#08221B] text-[#FFFFFF] py-2 text-[10px] sm:text-xs uppercase tracking-widest hover:bg-black transition-colors active:scale-95">
+              Add to Cart
+            </button>
           </div>
         </div>
-      </section>
 
-      {/* CTA Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-r from-[#0F231C] to-[#1C3A2C]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-['Cormorant_Garamond'] text-[#CBA135] mb-4 sm:mb-6">
-            Special Occasion Coming Up?
-          </h2>
-          <p className="text-sm sm:text-base md:text-lg text-[#EFDFB7] mb-6 sm:mb-8">
-            Let our experts help you find the perfect piece or create a custom design for your special day
-          </p>
-          <button className="bg-[#CBA135] text-[#0F231C] px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-full font-semibold text-sm sm:text-base hover:bg-[#D4AF37] transition-colors">
-            Book a Consultation
-          </button>
+      );
+    };
+
+    export const FeatureCard = ({ icon, title, description }) => (
+      <>
+
+      <div className="flex items-center gap-4 sm:gap-5 bg-white rounded-xl px-4 py-4 sm:px-6 sm:py-5 shadow-sm hover:shadow-md transition-all">
+        <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-[#1C3A2C] shrink-0">
+          <img src={icon} alt="" className="w-5 h-5 sm:w-6 sm:h-6" loading="lazy" />
         </div>
-      </section>
-    </div>
-  );
-};
+        <div className="flex flex-col">
+          <h4 className="text-[16px] sm:text-[18px] font-serif text-[#1C3A2C] leading-tight">{title}</h4>
+          <p className="text-[12px] sm:text-[14px] font-sans text-[#1C3A2C]/80 leading-snug">{description}</p>
+        </div>
+      </div>
+      </>
+    );
 
-export default Occasion;
+    export default Collections;
