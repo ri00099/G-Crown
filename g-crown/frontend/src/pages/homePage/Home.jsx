@@ -1,4 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { allProducts } from "../../assets/MockData";
+import ProductCard from "../../components/products/ProductCard";
 
 // Assets
 import gCrown from "../../assets/g-crown Image.jpeg";
@@ -14,6 +18,8 @@ import MenImg from "../../assets/homePage/Men.png";
 import KidImg from "../../assets/homePage/Kids.png";
 import Necklace from "../../assets/homePage/necklace.png";
 
+import gridImg from '../../assets/homePage/homeGrid.png'
+
 // --- Configuration Data ---
 const COLLECTIONS = [
   {
@@ -21,24 +27,28 @@ const COLLECTIONS = [
     subtitle: "From engagement to eternity",
     image: kaashiRings1,
     isNew: true,
+    path: "/collections/engagement-rings",
   },
   {
     title: "Wedding Bands",
     subtitle: "Handcrafted for your big day",
     image: kaashiRings2,
     isNew: true,
+    path: "/collections/wedding-bands",
   },
   {
     title: "Classic Solitaire",
     subtitle: "Timeless brilliance",
     image: kaashiRings1,
     isNew: true,
+    path: "/collections/classic-solitaire",
   },
   {
     title: "Vintage Bands",
     subtitle: "Refined heritage pieces",
     image: kaashiRings1,
     isNew: true,
+    path: "/collections/vintage-bands",
   },
 ];
 
@@ -66,9 +76,40 @@ const FEATURES = [
 ];
 
 const CURATED = [
-  { title: "WOMEN", image: WomenImg },
-  { title: "MEN", image: MenImg },
-  { title: "KIDS", image: KidImg },
+  { title: "WOMEN", image: WomenImg, path: "/collections" },
+  { title: "MEN", image: MenImg, path: "/collections" },
+  { title: "KIDS", image: KidImg, path: "/collections" },
+];
+
+const TESTIMONIALS = [
+  {
+    quote:
+      "The craftsmanship is unlike anything I've ever seen. My engagement ring from G-Crown is a daily reminder of elegance.",
+    author: "Sarah J.",
+    link: "/collections/engagement-rings",
+    buttonText: "Shop Engagement Rings",
+  },
+  {
+    quote:
+      "Our wedding bands were delivered exactly on time with perfect sizing. The craftsmanship feels premium and comfortable for daily wear.",
+    author: "Arjun & Meera",
+    link: "/collections/wedding-bands",
+    buttonText: "Shop Wedding Bands",
+  },
+  {
+    quote:
+      "I love how the classic solitaire I bought transitions from office wear to evening events. It's minimal, elegant, and very 'me'.",
+    author: "Kavya Desai",
+    link: "/collections/classic-solitaire",
+    buttonText: "Shop Classic Solitaire",
+  },
+  {
+    quote:
+      "The vintage band collection caught my eye immediately. Each piece tells a story, and the quality is exceptional. Highly recommended!",
+    author: "Rohan Kapoor",
+    link: "/collections/vintage-bands",
+    buttonText: "Shop Vintage Bands",
+  },
 ];
 
 // --- Shared Components ---
@@ -87,71 +128,69 @@ const SectionHeader = ({ title, subtitle }) => (
   </div>
 );
 
-const ProductCard = () => (
-  <div className="bg-white rounded-xl shadow-md overflow-hidden group hover:shadow-xl transition-shadow">
-    <div className="relative">
-      <img
-        src={Earing}
-        alt="Product"
-        className="w-full h-72 object-cover transition-transform group-hover:scale-105"
-      />
-      <span className="absolute top-3 left-3 bg-[#CBA135] text-white text-[10px] px-3 py-1 rounded-sm">
-        BESTSELLER
-      </span>
-      <button className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 flex items-center justify-center hover:bg-[#CBA135] hover:text-white transition-colors">
-        ♡
-      </button>
-    </div>
-    <div className="p-6">
-      <div className="flex text-[#CBA135] text-sm mb-2">
-        ★★★★★ <span className="text-gray-400 ml-2">(248)</span>
-      </div>
-      <h3 className="font-cormorant font-bold text-xl text-[#08221B] mb-2">
-        Eternal Sparkle Ring
-      </h3>
-      <div className="flex items-center gap-3 mb-4">
-        <span className="font-bold text-[#08221B]">₹2,45,000</span>
-        <span className="text-xs line-through text-gray-400">₹2,75,000</span>
-      </div>
-      <button className="w-full bg-[#08221B] text-white py-3 rounded text-sm font-bold tracking-widest hover:bg-[#0F3A30] transition-colors">
-        ADD TO CART
-      </button>
-    </div>
-  </div>
-);
+// Featured products - bestsellers
+const featuredProducts = allProducts.filter((p) => p.bestseller).slice(0, 6);
 
 export default function HomeMain() {
+  const navigate = useNavigate();
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  // Auto-rotate testimonials every 5 seconds
+  useEffect(() => {
+    if (isPaused) return;
+
+    const interval = setInterval(() => {
+      setCurrentTestimonial((prev) => (prev + 1) % TESTIMONIALS.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [isPaused]);
+
+  const goToNext = () => {
+    setCurrentTestimonial((prev) => (prev + 1) % TESTIMONIALS.length);
+  };
+
+  const goToPrevious = () => {
+    setCurrentTestimonial((prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
+  };
+
+  const currentTestimonialData = TESTIMONIALS[currentTestimonial];
+
   return (
     <main className="bg-[#FFF8E8] overflow-x-hidden">
       {/* 1. HERO SECTION */}
-<section
-  className="relative h-[85vh] min-h-[600px] flex items-center justify-center bg-cover bg-center"
-  style={{ backgroundImage: `url(${gCrown})` }}
->
-  {/* Dark overlay */}
-  <div className="absolute inset-0 bg-black/50" />
+      <section
+        className="relative h-[85vh] min-h-[600px] flex items-center justify-center bg-cover bg-center"
+        style={{ backgroundImage: `url(${gCrown})` }}
+      >
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/50" />
 
-  {/* Blur layer */}
-  <div className="absolute inset-0 backdrop-blur-[7.5px]" />
+        {/* Blur layer */}
+        <div className="absolute inset-0 backdrop-blur-[7.5px]" />
 
-  {/* Noise texture */}
-  <div className="noise-overlay" />
+        {/* Noise texture */}
+        <div className="noise-overlay" />
 
-  {/* Content */}
-  <div className="relative z-10 text-center px-6 max-w-4xl">
-    <h1 className="font-cormorant text-4xl md:text-7xl font-bold text-[#CBA135] leading-tight mb-6">
-      Luxury Designed to <br className="hidden md:block" /> Celebrate Your Glow
-    </h1>
+        {/* Content */}
+        <div className="relative z-10 text-center px-6 max-w-4xl">
+          <h1 className="font-cormorant text-4xl md:text-7xl font-bold text-[#CBA135] leading-tight mb-6">
+            Luxury Designed to <br className="hidden md:block" /> Celebrate Your
+            Glow
+          </h1>
 
-    <p className="text-gray-200 text-lg md:text-xl font-light mb-10 tracking-wide italic">
-      “Step into a world of refined detail and handcrafted brilliance”
-    </p>
+          <p className="text-gray-200 text-lg md:text-xl font-light mb-10 tracking-wide italic">
+            “Step into a world of refined detail and handcrafted brilliance”
+          </p>
 
-    <button className="px-16 py-4 bg-gradient-to-r from-[#B49148] via-[#F8E48F] to-[#BB9344] text-[#08221B] font-bold text-lg rounded-sm hover:scale-105 transition-transform shadow-2xl">
-      SHOP NOW
-    </button>
-  </div>
-</section>
+          <a href="/collections">
+            <button className="px-16 py-4 bg-gradient-to-r from-[#B49148] via-[#F8E48F] to-[#BB9344] text-[#08221B] font-bold text-lg rounded-sm hover:scale-105 transition-transform shadow-2xl">
+              SHOP NOW
+            </button>
+          </a>
+        </div>
+      </section>
 
       {/* 2. EXPLORE COLLECTIONS */}
       <section className="py-20 max-w-7xl mx-auto px-4">
@@ -161,6 +200,7 @@ export default function HomeMain() {
             <div
               key={i}
               className="group relative h-[450px] rounded-2xl overflow-hidden cursor-pointer shadow-lg"
+              onClick={() => item.path && navigate(item.path)}
             >
               <img
                 src={item.image}
@@ -173,12 +213,29 @@ export default function HomeMain() {
                   {item.title}
                 </h3>
                 <p className="text-sm text-gray-300 mb-4">{item.subtitle}</p>
-                <div className="flex items-center gap-2 text-[#CBA135] text-sm font-bold tracking-tighter group-hover:gap-4 transition-all uppercase">
+                <button
+                  type="button"
+                  className="flex items-center gap-2 text-[#CBA135] text-sm font-bold tracking-tighter group-hover:gap-4 transition-all uppercase"
+                >
                   Shop Now <span>→</span>
-                </div>
+                </button>
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Grid Image Section */}
+      <section className="w-full bg-[#FFF7E8] py-8 sm:py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="relative overflow-hidden rounded-2xl lg:rounded-3xl shadow-lg">
+            <img
+              src="https://i0.wp.com/elegance-suisse.ch/wp-content/uploads/The-Rarest-and-Most-Precious-Luxury-Jewelry-of-All-Time.jpg?resize=1000%2C560&ssl=1"
+              alt="Luxury Jewelry Collection"
+              className="w-full h-auto object-cover"
+              loading="lazy"
+            />
+          </div>
         </div>
       </section>
 
@@ -226,15 +283,18 @@ export default function HomeMain() {
       </section>
 
       {/* 4. FEATURED MASTERPIECES */}
-      <section className="py-24 max-w-7xl mx-auto px-6">
+      <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6">
         <SectionHeader title="Featured Masterpieces" />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {[...Array(6)].map((_, i) => (
-            <ProductCard key={i} />
+        <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+          {featuredProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
-        <div className="text-center mt-16">
-          <button className="px-12 py-4 bg-[#08221B] text-white font-bold tracking-widest rounded shadow-xl hover:bg-[#0F3A30] transition-colors">
+        <div className="text-center mt-12">
+          <button
+            onClick={() => navigate("/collections")}
+            className="px-12 py-4 bg-[#08221B] text-white font-bold tracking-widest rounded shadow-xl hover:bg-[#0F3A30] transition-colors"
+          >
             VIEW ALL PRODUCTS
           </button>
         </div>
@@ -248,6 +308,7 @@ export default function HomeMain() {
             <div
               key={i}
               className="group relative h-[500px] overflow-hidden rounded-3xl cursor-pointer"
+              onClick={() => cat.path && navigate(cat.path)}
             >
               <img
                 src={cat.image}
@@ -269,25 +330,72 @@ export default function HomeMain() {
           title="User Stories"
           subtitle="“Stories of elegance, confidence, and the shine Graphura brings to every occasion.”"
         />
-        <div className="relative mx-auto max-w-6xl h-[600px] flex items-center justify-center overflow-hidden md:overflow-visible">
-          {/* Professional stack effect using relative positions */}
-          <div className="hidden lg:block absolute left-0 w-64 h-[400px] bg-[#F4F0E6] rounded-xl border border-gray-200 opacity-40 -rotate-6 z-0" />
-          <div className="hidden md:block absolute left-10 md:left-24 w-80 h-[500px] bg-[#F4F0E6] rounded-xl border border-gray-200 shadow-xl -rotate-3 z-10" />
+        <div
+          className="relative mx-auto max-w-6xl h-[600px] flex items-center justify-center overflow-hidden md:overflow-visible"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          {/* Navigation Buttons */}
+          <button
+            type="button"
+            onClick={goToPrevious}
+            className="absolute left-4 md:left-8 z-30 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/90 shadow-lg flex items-center justify-center hover:bg-[#CBA135] hover:text-white transition-all group"
+            aria-label="Previous testimonial"
+          >
+            <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-[#08221B] group-hover:text-white transition-colors" />
+          </button>
+          <button
+            type="button"
+            onClick={goToNext}
+            className="absolute right-4 md:right-8 z-30 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/90 shadow-lg flex items-center justify-center hover:bg-[#CBA135] hover:text-white transition-all group"
+            aria-label="Next testimonial"
+          >
+            <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-[#08221B] group-hover:text-white transition-colors" />
+          </button>
 
-          {/* Main Card */}
-          <div className="relative w-[350px] md:w-[450px] h-[600px] bg-white rounded-2xl shadow-2xl z-20 border border-[#CBA135]/20 p-8 flex flex-col justify-center text-center">
-            <div className="text-[#CBA135] text-4xl mb-4 font-serif">“</div>
+          {/* Professional stack effect using relative positions */}
+          <div className="hidden lg:block absolute left-0 w-64 h-[400px] bg-[#F4F0E6] rounded-xl border border-gray-200 opacity-40 -rotate-6 z-0 transition-opacity duration-500" />
+          <div className="hidden md:block absolute left-10 md:left-24 w-80 h-[500px] bg-[#F4F0E6] rounded-xl border border-gray-200 shadow-xl -rotate-3 z-10 transition-opacity duration-500" />
+
+          {/* Main Card with fade transition */}
+          <div
+            key={currentTestimonial}
+            className="relative w-[350px] md:w-[450px] h-[600px] bg-white rounded-2xl shadow-2xl z-20 border border-[#CBA135]/20 p-8 flex flex-col justify-center text-center transition-all duration-500 animate-fadeIn"
+          >
+            <div className="text-[#CBA135] text-4xl mb-4 font-serif">"</div>
             <p className="text-[#08221B] text-lg italic mb-6">
-              "The craftsmanship is unlike anything I've ever seen. My
-              engagement ring from G-Crown is a daily reminder of elegance."
+              "{currentTestimonialData.quote}"
             </p>
             <h4 className="font-bold text-[#08221B] font-cormorant text-2xl">
-              — Sarah J.
+              — {currentTestimonialData.author}
             </h4>
+            <button
+              type="button"
+              onClick={() => navigate(currentTestimonialData.link)}
+              className="mt-8 inline-flex items-center justify-center px-8 py-3 rounded-full bg-[#08221B] text-white text-xs uppercase tracking-[0.25em] hover:bg-black transition-colors"
+            >
+              {currentTestimonialData.buttonText}
+            </button>
           </div>
 
-          <div className="hidden md:block absolute right-10 md:right-24 w-80 h-[500px] bg-[#F4F0E6] rounded-xl border border-gray-200 shadow-xl rotate-3 z-10" />
-          <div className="hidden lg:block absolute right-0 w-64 h-[400px] bg-[#F4F0E6] rounded-xl border border-gray-200 opacity-40 rotate-6 z-0" />
+          <div className="hidden md:block absolute right-10 md:right-24 w-80 h-[500px] bg-[#F4F0E6] rounded-xl border border-gray-200 shadow-xl rotate-3 z-10 transition-opacity duration-500" />
+          <div className="hidden lg:block absolute right-0 w-64 h-[400px] bg-[#F4F0E6] rounded-xl border border-gray-200 opacity-40 rotate-6 z-0 transition-opacity duration-500" />
+
+          {/* Dot Indicators */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex gap-2">
+            {TESTIMONIALS.map((_, index) => (
+              <button
+                key={index}
+                type="button"
+                onClick={() => setCurrentTestimonial(index)}
+                className={`w-2 h-2 rounded-full transition-all ${index === currentTestimonial
+                  ? "bg-[#CBA135] w-8"
+                  : "bg-gray-300 hover:bg-gray-400"
+                  }`}
+                aria-label={`Go to testimonial ${index + 1}`}
+              />
+            ))}
+          </div>
         </div>
       </section>
 

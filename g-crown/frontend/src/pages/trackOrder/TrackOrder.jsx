@@ -1,9 +1,11 @@
 import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   Check,
   CreditCard,
   Headphones,
   Truck as ShippingIcon,
+  ArrowLeft,
 } from "lucide-react";
 
 import p1 from "../../assets/trackingPage/p1.jpg";
@@ -53,33 +55,47 @@ const products = [
 /* ================= MAIN ================= */
 
 export default function TrackOrder() {
-  return (
-    <main className="min-h-screen bg-[#FBF6EA] px-6 py-12 font-cormorant text-[#0F241A]">
-      <h1 className="mb-12 text-center text-xl font-medium tracking-wide">
-        Track Order
-      </h1>
+  const location = useLocation();
+  const navigate = useNavigate();
+  const orderId = location.state?.orderId || "SDGTT456AD";
 
-      <OrderStatus />
-      <OrderInfo />
-      <Products />
-      <Services />
+  return (
+    <main className="min-h-screen bg-[#FBF6EA] px-4 sm:px-6 py-8 sm:py-12 font-cormorant text-[#0F241A]">
+      <div className="max-w-5xl mx-auto">
+        <button
+          onClick={() => navigate("/track-order")}
+          className="flex items-center gap-2 text-[#0F241A] mb-6 hover:text-[#CBA135] transition-colors"
+        >
+          <ArrowLeft size={18} />
+          <span className="text-sm">Back to Tracking</span>
+        </button>
+
+        <h1 className="mb-8 sm:mb-12 text-center text-2xl sm:text-3xl font-medium tracking-wide">
+          Order Tracking
+        </h1>
+
+        <OrderStatus orderId={orderId} />
+        <OrderInfo />
+        <Products />
+        <Services />
+      </div>
     </main>
   );
 }
 
 /* ================= ORDER STATUS ================= */
 
-function OrderStatus() {
+function OrderStatus({ orderId }) {
   return (
-    <section className="mx-auto mb-14 max-w-5xl">
-      <h2 className="mb-1 text-lg font-semibold">Order Status</h2>
+    <section className="mx-auto mb-8 sm:mb-14">
+      <h2 className="mb-2 text-lg sm:text-xl font-semibold">Order Status</h2>
       <p className="mb-6 text-sm text-gray-600">
-        Order ID : <span className="font-medium">#SDGTT456AD</span>
+        Order ID : <span className="font-medium">#{orderId}</span>
       </p>
 
-      <div className="rounded-md border border-[#CFC7B5] bg-[#FBF6EA] px-6 py-10">
+      <div className="rounded-lg border border-[#CFC7B5] bg-white px-4 sm:px-6 py-8 sm:py-10 shadow-sm">
         <div
-          className="relative flex justify-between gap-6 overflow-x-auto"
+          className="relative flex flex-wrap sm:flex-nowrap justify-between gap-4 sm:gap-6"
           role="progressbar"
           aria-valuemin={0}
           aria-valuemax={steps.length}
@@ -91,13 +107,13 @@ function OrderStatus() {
             return (
               <div
                 key={i}
-                className="relative min-w-[160px] flex-1 text-center"
+                className="relative flex-1 min-w-[120px] sm:min-w-[140px] text-center"
                 aria-current={isCompleted ? "step" : undefined}
               >
                 {/* CONNECTOR */}
                 {!isLast && (
                   <span
-                    className={`absolute top-[14px] left-1/2 h-[2px] w-full ${
+                    className={`hidden sm:block absolute top-[14px] left-[60%] h-[2px] w-[80%] ${
                       isCompleted ? "bg-[#1F3B2D]" : "bg-[#D6D6D6]"
                     }`}
                   />
@@ -105,19 +121,19 @@ function OrderStatus() {
 
                 {/* STEP DOT */}
                 <div
-                  className={`relative z-10 mx-auto mb-3 flex h-7 w-7 items-center justify-center rounded-md border ${
+                  className={`relative z-10 mx-auto mb-3 flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-md border transition-all ${
                     isCompleted
-                      ? "bg-[#C9A24D] border-[#C9A24D]"
+                      ? "bg-[#C9A24D] border-[#C9A24D] shadow-md"
                       : "bg-[#E0E0E0] border-[#CFC7B5]"
                   }`}
                 >
-                  {isCompleted && <Check size={14} className="text-white" />}
+                  {isCompleted && <Check size={16} className="text-white" />}
                 </div>
 
-                <p className="text-sm font-medium">{step.label}</p>
+                <p className="text-xs sm:text-sm font-medium">{step.label}</p>
                 <p className="mt-1 text-xs text-gray-600">{step.date}</p>
                 {step.time && (
-                  <p className="text-xs text-gray-600">{step.time}</p>
+                  <p className="text-xs text-gray-500">{step.time}</p>
                 )}
               </div>
             );
@@ -132,8 +148,8 @@ function OrderStatus() {
 
 function OrderInfo() {
   return (
-    <section className="mx-auto mb-14 max-w-5xl rounded-md border border-[#CFC7B5]">
-      <h3 className="border-b border-[#CFC7B5] px-6 py-4 font-semibold">
+    <section className="mx-auto mb-8 sm:mb-14 rounded-lg border border-[#CFC7B5] bg-white shadow-sm overflow-hidden">
+      <h3 className="border-b border-[#CFC7B5] px-4 sm:px-6 py-4 font-semibold text-lg">
         Order Information
       </h3>
 
@@ -143,9 +159,9 @@ function OrderInfo() {
         <InfoRow label="Payment Method" value="Paypal" />
       </div>
 
-      <div className="flex justify-between bg-[#0F241A] px-6 py-4 font-medium text-white">
+      <div className="flex justify-between bg-[#0F241A] px-4 sm:px-6 py-4 font-medium text-white">
         <span>Total :</span>
-        <span>₹ 2,15,000 /Only</span>
+        <span>₹ 2,15,000</span>
       </div>
     </section>
   );
@@ -155,26 +171,31 @@ function OrderInfo() {
 
 function Products() {
   return (
-    <section className="mx-auto mb-16 max-w-5xl rounded-md border border-[#CFC7B5]">
-      <h3 className="border-b border-[#CFC7B5] px-6 py-4 font-semibold">
+    <section className="mx-auto mb-12 sm:mb-16 rounded-lg border border-[#CFC7B5] bg-white shadow-sm overflow-hidden">
+      <h3 className="border-b border-[#CFC7B5] px-4 sm:px-6 py-4 font-semibold text-lg">
         Products
       </h3>
 
       <div className="divide-y divide-[#E2DCCB]">
         {products.map((p, i) => (
-          <div key={i} className="flex items-center gap-4 px-6 py-4">
+          <div
+            key={i}
+            className="flex items-center gap-4 px-4 sm:px-6 py-4 hover:bg-gray-50 transition-colors"
+          >
             <img
               src={p.img}
               alt={p.name}
-              className="h-14 w-14 rounded object-cover"
+              className="h-14 w-14 sm:h-16 sm:w-16 rounded object-cover flex-shrink-0"
             />
-            <div className="flex-1">
-              <p className="font-medium">{p.name}</p>
-              <p className="text-sm text-gray-600">
+            <div className="flex-1 min-w-0">
+              <p className="font-medium text-sm sm:text-base">{p.name}</p>
+              <p className="text-xs sm:text-sm text-gray-600">
                 Earring | {p.qty} Qty.
               </p>
             </div>
-            <span className="text-sm text-gray-500">Price</span>
+            <span className="text-xs sm:text-sm text-gray-500 font-medium">
+              ₹45,000
+            </span>
           </div>
         ))}
       </div>
@@ -186,19 +207,19 @@ function Products() {
 
 function Services() {
   return (
-    <section className="mx-auto grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-3">
+    <section className="mx-auto grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-3">
       <Service
-        icon={<ShippingIcon />}
+        icon={<ShippingIcon size={20} />}
         title="Free Shipping"
         desc="Free Shipping for Order above ₹ 2,000"
       />
       <Service
-        icon={<CreditCard />}
+        icon={<CreditCard size={20} />}
         title="Flexible Payment"
         desc="Multiple secure payment options"
       />
       <Service
-        icon={<Headphones />}
+        icon={<Headphones size={20} />}
         title="24x7 Support"
         desc="We support online all days"
       />
@@ -216,13 +237,13 @@ const InfoRow = ({ label, value }) => (
 );
 
 const Service = ({ icon, title, desc }) => (
-  <div className="flex items-center gap-4">
-    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0F241A] text-white">
+  <div className="flex items-center gap-4 p-4 bg-white rounded-lg border border-[#CFC7B5] shadow-sm hover:shadow-md transition-shadow">
+    <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-[#0F241A] text-white flex-shrink-0">
       {icon}
     </div>
     <div>
-      <p className="font-medium">{title}</p>
-      <p className="text-sm text-gray-600">{desc}</p>
+      <p className="font-medium text-sm sm:text-base">{title}</p>
+      <p className="text-xs sm:text-sm text-gray-600">{desc}</p>
     </div>
   </div>
 );

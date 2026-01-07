@@ -1,7 +1,5 @@
-// Order Tracking Page – consistent with your luxury jewellery theme
-// Functionality: enter Order ID → submit → shows tracking result section
-
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import bannerImage from "../../assets/occassions/bannerImg.jpg";
 
 const mockOrderStatus = {
@@ -16,8 +14,8 @@ const mockOrderStatus = {
 };
 
 export default function OrderTracking() {
+  const navigate = useNavigate();
   const [orderId, setOrderId] = useState("");
-  const [result, setResult] = useState(null);
   const [error, setError] = useState("");
 
   const handleTrack = (e) => {
@@ -29,14 +27,8 @@ export default function OrderTracking() {
       return;
     }
 
-    const data = mockOrderStatus[orderId.trim()];
-    if (!data) {
-      setError("Order not found. Please check your Order ID.");
-      setResult(null);
-      return;
-    }
-
-    setResult(data);
+    // Navigate to track order page with order ID
+    navigate("/track-id", { state: { orderId: orderId.trim() } });
   };
 
   return (
@@ -75,34 +67,12 @@ export default function OrderTracking() {
           </form>
 
           {error && (
-            <p className="text-center text-sm text-red-500">{error}</p>
+            <p className="text-center text-sm text-red-500 mb-4">{error}</p>
           )}
 
-          {/* Result */}
-          {result && (
-            <div className="mt-10">
-              <h3 className="text-center text-lg font-semibold text-[#1C3A2C] mb-6">
-                Current Status: <span className="text-[#B39055]">{result.status}</span>
-              </h3>
-
-              <div className="flex justify-between items-center">
-                {result.steps.map((step, index) => (
-                  <div key={step} className="flex-1 flex flex-col items-center">
-                    <div
-                      className={`w-4 h-4 rounded-full mb-2 ${
-                        index <= result.steps.indexOf(result.status)
-                          ? "bg-[#1C3A2C]"
-                          : "bg-gray-300"
-                      }`}
-                    />
-                    <p className="text-xs text-center text-[#1C3A2C]">
-                      {step}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          <p className="text-center text-xs text-gray-500 mt-4">
+            Enter your order ID to track your shipment status
+          </p>
         </div>
       </section>
     </div>

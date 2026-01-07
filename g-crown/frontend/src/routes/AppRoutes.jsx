@@ -8,6 +8,10 @@ import SignIn from "../pages/auth/SignIn.jsx";
 import SignUp from "../pages/auth/SignUp.jsx";
 
 import Collections from "../pages/collections/Collections.jsx";
+import EngagementRings from "../pages/collections/EngagementRings.jsx";
+import WeddingBands from "../pages/collections/WeddingBands.jsx";
+import ClassicSolitaire from "../pages/collections/ClassicSolitaire.jsx";
+import VintageBands from "../pages/collections/VintageBands.jsx";
 import NewArrivals from "../pages/newArrivals/NewArrival.jsx";
 import Occasions from "../pages/occasions/Occasion.jsx";
 import Store from "../pages/store/Store.jsx";
@@ -17,6 +21,12 @@ import Profile from "./../pages/Profile/Profile.jsx"
 
 import TrackingOrder from '../pages/trackOrder/TrackOrder.jsx'
 import TrackingForm from '../pages/trackOrder/TrackingForm.jsx'
+import Cart from '../pages/cart/Cart.jsx'
+import Favorites from '../pages/favorites/Favorites.jsx'
+import OrderSuccess from '../pages/orders/OrderSuccess.jsx'
+import OrderCancel from '../pages/orders/OrderCancel.jsx'
+
+
 
 export default function AppRoutes() {
   const location = useLocation();
@@ -36,6 +46,10 @@ export default function AppRoutes() {
         <Route path="/signup" element={<SignUp />} />
 
         <Route path="/collections" element={<Collections />} />
+        <Route path="/collections/engagement-rings" element={<EngagementRings />} />
+        <Route path="/collections/wedding-bands" element={<WeddingBands />} />
+        <Route path="/collections/classic-solitaire" element={<ClassicSolitaire />} />
+        <Route path="/collections/vintage-bands" element={<VintageBands />} />
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/new-arrivals" element={<NewArrivals />} />
         <Route path="/occasions" element={<Occasions />} />
@@ -44,6 +58,12 @@ export default function AppRoutes() {
 
         <Route path="/track-order" element={<TrackingForm />} />
         <Route path="/track-id" element={<TrackingOrder />} />
+
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/favorites" element={<Favorites />} />
+        <Route path="/favourites" element={<Favorites />} />
+        <Route path="/order-success" element={<OrderSuccess />} />
+        <Route path="/order-cancel" element={<OrderCancel />} />
     
         <Route path="/profile" element={<Profile />} />
       </Routes>

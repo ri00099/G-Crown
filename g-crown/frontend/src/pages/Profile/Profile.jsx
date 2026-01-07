@@ -5,7 +5,7 @@ import MyOrders from "./Sections/MyOrders";
 import Address from "./Sections/Address";
 import Payment from "./Sections/Payment";
 import Password from "./Sections/Password";
-import { FeatureCard } from "../collections/Collections.jsx";
+import FeatureCard from "../../components/common/FeatureCard";
 
 import shippingIcon from "../../assets/NewArrivalAssets/logos/la_shipping-fast.png";
 import paymentIcon from "../../assets/NewArrivalAssets/logos/fluent_payment-32-regular.png";

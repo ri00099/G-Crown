@@ -1,9 +1,9 @@
      import React, { useState, useMemo, useCallback } from "react";
     import { ChevronDown, X, SlidersHorizontal } from "lucide-react";
     import { FilterSidebar } from "../../components/filterSection";
-    // import earingImg from "../../assets/collectionPage/ear-ring.png";
     import { useNavigate } from "react-router-dom";
     import { allProducts } from "./MockData";
+    import ProductCard from "../../components/products/ProductCard";
 
 
     import shippingIcon from "../../assets/NewArrivalAssets/logos/la_shipping-fast.png";
@@ -247,55 +247,6 @@
       );
     };
 
-
-
-    export const ProductCard = ({ product }) => {
-        const navigate = useNavigate();
-      return (
-
-        <div className="bg-[#FFF9E9] relative rounded-md group cursor-pointer"  onClick={() => navigate(`/product/${product.id}`, { state: { product } })}>
-          {product.bestseller && (
-            <div className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-[#CBA135] text-[#FFFFFF] text-[8px] sm:text-[10px] px-2 py-0.5 font-normal z-10 tracking-widest">
-              BESTSELLER
-            </div>
-          )}
-          <button className="absolute top-2 right-2 sm:top-4 sm:right-4 text-gray-300 z-10 bg-white p-2 rounded-full shadow-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="w-3 h-3 fill-[#08221B] hover:fill-red-500 transition-colors">
-              <path d="M241 87.1l15 20.7 15-20.7C296 52.5 336.2 32 378.9 32 452.4 32 512 91.6 512 165.1l0 2.6c0 112.2-139.9 242.5-212.9 298.2-12.4 9.4-27.6 14.1-43.1 14.1s-30.8-4.6-43.1-14.1C139.9 410.2 0 279.9 0 167.7l0-2.6C0 91.6 59.6 32 133.1 32 175.8 32 216 52.5 241 87.1z" />
-            </svg>
-          </button>
-
-          <div className="h-48 sm:h-64 bg-gray-100 mb-4 overflow-hidden rounded-t-md">
-            <img 
-              src={product.image} 
-              alt={product.name} 
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 " 
-            />
-          </div>
-
-          <div className="px-1 sm:px-4 pb-4">
-            <div className="text-[#CBA135] text-xs sm:text-md mb-0.5">
-              ★★★★★ <span className="text-[#08221B] text-[10px] sm:text-[13px]">({product.reviews})</span>
-            </div>
-            <h3 className="font-serif text-[12px] sm:text-sm mb-0.5 text-[#08221B] line-clamp-1">{product.name}</h3>
-            <p className="text-[9px] sm:text-[10px] text-[#37654B] mb-1">{product.material} | {product.color}</p>
-            
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 mb-4">
-              <div>
-                <h2 className="font-bold text-[#08221B] text-sm sm:text-xl">₹{product.price.toLocaleString()}</h2>
-                <h2 className="text-[10px] sm:text-xs text-[#37654B] line-through">₹{product.oldPrice.toLocaleString()}</h2>
-              </div>
-              <div className="w-fit px-2 py-0.5 text-[8px] sm:text-[10px] bg-[#EF4444] text-white font-bold rounded">SAVE 10%</div>
-            </div>
-            
-            <button className="w-full bg-[#08221B] text-[#FFFFFF] py-2 text-[10px] sm:text-xs uppercase tracking-widest hover:bg-black transition-colors active:scale-95">
-              Add to Cart
-            </button>
-          </div>
-        </div>
-
-      );
-    };
 
     export const FeatureCard = ({ icon, title, description }) => (
       <>

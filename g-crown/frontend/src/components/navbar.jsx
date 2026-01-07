@@ -10,12 +10,16 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Logo from "../assets/logo.svg";
+import { useCart } from "../context/CartContext";
+import { useFavorites } from "../context/FavoritesContext";
 
 export default function Navbar() {
   const [visible, setVisible] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const lastScrollY = useRef(0);
   const navigate = useNavigate();
+  const { getCartCount } = useCart();
+  const { favorites } = useFavorites();
 
   /* ---------------- Scroll hide / show ---------------- */
   useEffect(() => {
@@ -81,15 +85,34 @@ export default function Navbar() {
 
             {/* MOBILE RIGHT ICONS */}
             <div className="flex items-center gap-2 lg:hidden">
-              <IconButton Icon={Heart} />
-              <IconButton Icon={ShoppingCart} />
+              <IconButton
+                Icon={Heart}
+                onClick={() => navigate("/favorites")}
+                badge={favorites.length}
+              />
+              <IconButton
+                Icon={ShoppingCart}
+                onClick={() => navigate("/cart")}
+                badge={getCartCount()}
+              />
             </div>
 
             {/* DESKTOP ICONS */}
             <div className="hidden lg:flex items-center gap-3 ">
-              <IconButton Icon={Heart} onClick={() => navigate("/favourites")} />
-              <IconButton Icon={ShoppingCart} onClick={() => navigate("/cart")} />
-              <IconButton Icon={MapPin} onClick={() => navigate("/track-order")} />
+              <IconButton
+                Icon={Heart}
+                onClick={() => navigate("/favorites")}
+                badge={favorites.length}
+              />
+              <IconButton
+                Icon={ShoppingCart}
+                onClick={() => navigate("/cart")}
+                badge={getCartCount()}
+              />
+              <IconButton
+                Icon={MapPin}
+                onClick={() => navigate("/track-order")}
+              />
               {/* PROFILE ICON */}
               <IconButton
                 Icon={User}
@@ -160,8 +183,24 @@ export default function Navbar() {
         {/* Drawer Footer */}
         <div className="absolute bottom-6 left-0 w-full px-6">
           <div className="flex justify-between">
-            <MobileAction Icon={Heart} label="Wishlist" />
-            <MobileAction Icon={ShoppingCart} label="Cart" />
+            <MobileAction
+              Icon={Heart}
+              label="Wishlist"
+              onClick={() => {
+                setMenuOpen(false);
+                navigate("/favorites");
+              }}
+              badge={favorites.length}
+            />
+            <MobileAction
+              Icon={ShoppingCart}
+              label="Cart"
+              onClick={() => {
+                setMenuOpen(false);
+                navigate("/cart");
+              }}
+              badge={getCartCount()}
+            />
             <MobileAction
               Icon={User}
               label="Account"
@@ -179,25 +218,35 @@ export default function Navbar() {
 
 /* ---------------- Reusable Components ---------------- */
 
-function IconButton({ Icon, onClick }) {
+function IconButton({ Icon, onClick, badge = 0 }) {
   return (
     <button
       onClick={onClick}
-      className="flex h-10 w-10 items-center justify-center rounded-full bg-[#FBF6EA] text-[#0F231C] cursor-pointer"
+      className="relative flex h-10 w-10 items-center justify-center rounded-full bg-[#FBF6EA] text-[#0F231C] cursor-pointer hover:bg-[#E8DDC4] transition-colors"
     >
       <Icon size={18} />
+      {badge > 0 && (
+        <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#CBA135] text-[10px] font-bold text-white">
+          {badge > 9 ? "9+" : badge}
+        </span>
+      )}
     </button>
   );
 }
 
-function MobileAction({ Icon, label, onClick }) {
+function MobileAction({ Icon, label, onClick, badge = 0 }) {
   return (
     <button
       onClick={onClick}
-      className="flex flex-col items-center gap-1 text-sm"
+      className="relative flex flex-col items-center gap-1 text-sm"
     >
-      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#FBF6EA] text-[#0F231C]">
+      <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-[#FBF6EA] text-[#0F231C]">
         <Icon size={20} />
+        {badge > 0 && (
+          <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#CBA135] text-[10px] font-bold text-white">
+            {badge > 9 ? "9+" : badge}
+          </span>
+        )}
       </div>
       <span className="text-[#CBA135]">{label}</span>
     </button>
