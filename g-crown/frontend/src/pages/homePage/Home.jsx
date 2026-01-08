@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; // Updated
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { toast, ToastContainer } from "react-toastify"; // Added
+import "react-toastify/dist/ReactToastify.css"; // Added
 import { allProducts } from "../../assets/MockData";
 import ProductCard from "../../components/products/ProductCard";
-
+import { useSearchParams } from "react-router-dom";
 // Assets
 import gCrown from "../../assets/g-crown Image.jpeg";
 import kaashiRings1 from "../../assets/homePage/kaashRings.jpg";
@@ -132,9 +134,61 @@ const SectionHeader = ({ title, subtitle }) => (
 const featuredProducts = allProducts.filter((p) => p.bestseller).slice(0, 6);
 
 export default function HomeMain() {
+const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    // Check if the URL has ?welcome=true
+    if (searchParams.get("welcome") === "true") {
+      
+      // Trigger the welcome notification
+      toast("Welcome to G-Crown websit", {
+        duration: 5000,
+        position: "top-right",
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        
+        style: { 
+          backgroundColor: '#08221B', // Your Brand Green
+          color: '#CBA135', // Your Brand Gold
+          fontFamily: 'Cormorant Garamond, serif'
+        },
+      });
+
+    }
+  }, [searchParams, setSearchParams]);
+
   const navigate = useNavigate();
+  const location = useLocation(); // Added location hook
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+
+  // --- WELCOME TOAST LOGIC ---
+  useEffect(() => {
+    if (location.state?.welcomeMessage) {
+      toast.success(`Welcome to G-Crown, ${location.state.userName || 'User'}!`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        // progress: undefined,
+        theme: "colored",
+        style: { 
+          backgroundColor: '#08221B', // Your Brand Green
+          color: '#CBA135', // Your Brand Gold
+          fontFamily: 'Cormorant Garamond, serif'
+        },
+      });
+      
+      // Clear the state so the toast doesn't reappear on manual refresh
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
 
   // Auto-rotate testimonials every 5 seconds
   useEffect(() => {
@@ -153,27 +207,28 @@ export default function HomeMain() {
 
   const goToPrevious = () => {
     setCurrentTestimonial((prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
+    
   };
 
   const currentTestimonialData = TESTIMONIALS[currentTestimonial];
 
   return (
     <main className="bg-[#FFF8E8] overflow-x-hidden">
+
+
+
+      {/* ToastContainer to render notifications */}
+      <ToastContainer />
+
       {/* 1. HERO SECTION */}
       <section
         className="relative h-[85vh] min-h-[600px] flex items-center justify-center bg-cover bg-center"
         style={{ backgroundImage: `url(${gCrown})` }}
       >
-        {/* Dark overlay */}
         <div className="absolute inset-0 bg-black/50" />
-
-        {/* Blur layer */}
         <div className="absolute inset-0 backdrop-blur-[7.5px]" />
-
-        {/* Noise texture */}
         <div className="noise-overlay" />
 
-        {/* Content */}
         <div className="relative z-10 text-center px-6 max-w-4xl">
           <h1 className="font-cormorant text-4xl md:text-7xl font-bold text-[#CBA135] leading-tight mb-6">
             Luxury Designed to <br className="hidden md:block" /> Celebrate Your
@@ -184,7 +239,7 @@ export default function HomeMain() {
             “Step into a world of refined detail and handcrafted brilliance”
           </p>
 
-          <a href="/collections">
+          <a href="/collections" >
             <button className="px-16 py-4 bg-gradient-to-r from-[#B49148] via-[#F8E48F] to-[#BB9344] text-[#08221B] font-bold text-lg rounded-sm hover:scale-105 transition-transform shadow-2xl">
               SHOP NOW
             </button>
@@ -200,7 +255,10 @@ export default function HomeMain() {
             <div
               key={i}
               className="group relative h-[450px] rounded-2xl overflow-hidden cursor-pointer shadow-lg"
-              onClick={() => item.path && navigate(item.path)}
+              onClick={() => {
+                item.path && navigate(item.path);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
             >
               <img
                 src={item.image}
@@ -292,7 +350,10 @@ export default function HomeMain() {
         </div>
         <div className="text-center mt-12">
           <button
-            onClick={() => navigate("/collections")}
+            onClick={() => {
+              navigate("/collections")
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
             className="px-12 py-4 bg-[#08221B] text-white font-bold tracking-widest rounded shadow-xl hover:bg-[#0F3A30] transition-colors"
           >
             VIEW ALL PRODUCTS
@@ -308,7 +369,10 @@ export default function HomeMain() {
             <div
               key={i}
               className="group relative h-[500px] overflow-hidden rounded-3xl cursor-pointer"
-              onClick={() => cat.path && navigate(cat.path)}
+              onClick={() => {
+                cat.path && navigate(cat.path)
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
             >
               <img
                 src={cat.image}
@@ -324,7 +388,7 @@ export default function HomeMain() {
         </div>
       </section>
 
-      {/* 6. USER STORIES (Fixed Styling) */}
+      {/* 6. USER STORIES */}
       <section className="py-24 bg-[#F9F6EE]">
         <SectionHeader
           title="User Stories"
@@ -335,12 +399,10 @@ export default function HomeMain() {
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          {/* Navigation Buttons */}
           <button
             type="button"
             onClick={goToPrevious}
             className="absolute left-4 md:left-8 z-30 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/90 shadow-lg flex items-center justify-center hover:bg-[#CBA135] hover:text-white transition-all group"
-            aria-label="Previous testimonial"
           >
             <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-[#08221B] group-hover:text-white transition-colors" />
           </button>
@@ -348,16 +410,13 @@ export default function HomeMain() {
             type="button"
             onClick={goToNext}
             className="absolute right-4 md:right-8 z-30 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/90 shadow-lg flex items-center justify-center hover:bg-[#CBA135] hover:text-white transition-all group"
-            aria-label="Next testimonial"
           >
             <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-[#08221B] group-hover:text-white transition-colors" />
           </button>
 
-          {/* Professional stack effect using relative positions */}
-          <div className="hidden lg:block absolute left-0 w-64 h-[400px] bg-[#F4F0E6] rounded-xl border border-gray-200 opacity-40 -rotate-6 z-0 transition-opacity duration-500" />
-          <div className="hidden md:block absolute left-10 md:left-24 w-80 h-[500px] bg-[#F4F0E6] rounded-xl border border-gray-200 shadow-xl -rotate-3 z-10 transition-opacity duration-500" />
+          <div className="hidden lg:block absolute left-0 w-64 h-[400px] bg-[#F4F0E6] rounded-xl border border-gray-200 opacity-40 -rotate-6 z-0" />
+          <div className="hidden md:block absolute left-10 md:left-24 w-80 h-[500px] bg-[#F4F0E6] rounded-xl border border-gray-200 shadow-xl -rotate-3 z-10" />
 
-          {/* Main Card with fade transition */}
           <div
             key={currentTestimonial}
             className="relative w-[350px] md:w-[450px] h-[600px] bg-white rounded-2xl shadow-2xl z-20 border border-[#CBA135]/20 p-8 flex flex-col justify-center text-center transition-all duration-500 animate-fadeIn"
@@ -371,17 +430,19 @@ export default function HomeMain() {
             </h4>
             <button
               type="button"
-              onClick={() => navigate(currentTestimonialData.link)}
+              onClick={() => {
+                navigate(currentTestimonialData.link)
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
               className="mt-8 inline-flex items-center justify-center px-8 py-3 rounded-full bg-[#08221B] text-white text-xs uppercase tracking-[0.25em] hover:bg-black transition-colors"
             >
               {currentTestimonialData.buttonText}
             </button>
           </div>
 
-          <div className="hidden md:block absolute right-10 md:right-24 w-80 h-[500px] bg-[#F4F0E6] rounded-xl border border-gray-200 shadow-xl rotate-3 z-10 transition-opacity duration-500" />
-          <div className="hidden lg:block absolute right-0 w-64 h-[400px] bg-[#F4F0E6] rounded-xl border border-gray-200 opacity-40 rotate-6 z-0 transition-opacity duration-500" />
+          <div className="hidden md:block absolute right-10 md:right-24 w-80 h-[500px] bg-[#F4F0E6] rounded-xl border border-gray-200 shadow-xl rotate-3 z-10" />
+          <div className="hidden lg:block absolute right-0 w-64 h-[400px] bg-[#F4F0E6] rounded-xl border border-gray-200 opacity-40 rotate-6 z-0" />
 
-          {/* Dot Indicators */}
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex gap-2">
             {TESTIMONIALS.map((_, index) => (
               <button
@@ -392,7 +453,6 @@ export default function HomeMain() {
                   ? "bg-[#CBA135] w-8"
                   : "bg-gray-300 hover:bg-gray-400"
                   }`}
-                aria-label={`Go to testimonial ${index + 1}`}
               />
             ))}
           </div>
@@ -412,7 +472,10 @@ export default function HomeMain() {
             <h2 className="font-cormorant text-4xl md:text-5xl font-bold text-[#E6C36A] leading-tight mb-8">
               Elevate Your Elegance <br /> with G-Crown Jewellers
             </h2>
-            <button className="px-10 py-4 bg-gradient-to-r from-[#C9A14A] via-[#E6C36A] to-[#B8903D] text-[#08221B] font-bold text-xl rounded-lg hover:scale-105 transition-transform shadow-xl">
+            <button className="px-10 py-4 bg-gradient-to-r from-[#C9A14A] via-[#E6C36A] to-[#B8903D] text-[#08221B] font-bold text-xl rounded-lg hover:scale-105 transition-transform shadow-xl" onClick={()=>{
+                  navigate("/target");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+            }}>
               Contact Us
             </button>
           </div>

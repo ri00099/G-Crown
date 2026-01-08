@@ -94,3 +94,43 @@ body {
 .animate-slideIn {
   animation: slideIn 0.3s ease-out;
 }
+
+@keyframes wishlistExit {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0) rotate(0deg);
+    filter: blur(0);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+
+  40% {
+    transform: scale(1.03) translateY(-6px) rotate(-1deg);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.85) translateY(-30px) rotate(-2deg);
+    filter: blur(4px);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+}
+
+.animate-wishlist-exit {
+  animation: wishlistExit 520ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes toastIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-toast-in {
+  animation: toastIn 280ms cubic-bezier(0.4, 0, 0.2, 1);
+}

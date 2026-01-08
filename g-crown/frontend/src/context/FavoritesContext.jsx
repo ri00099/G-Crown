@@ -28,7 +28,9 @@ export const FavoritesProvider = ({ children }) => {
             return [...prev, product];
         });
     };
-
+    const clearFavorites = () => {
+  setFavorites([]);
+};
     const removeFromFavorites = (productId) => {
         setFavorites((prev) => prev.filter((item) => item.id !== productId));
     };
@@ -55,6 +57,7 @@ export const FavoritesProvider = ({ children }) => {
                 removeFromFavorites,
                 toggleFavorite,
                 isFavorite,
+                clearFavorites
             }}
         >
             {children}

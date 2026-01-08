@@ -8,7 +8,10 @@ import shippingIcon from "../../assets/NewArrivalAssets/logos/la_shipping-fast.p
 import paymentIcon from "../../assets/NewArrivalAssets/logos/fluent_payment-32-regular.png";
 import supportIcon from "../../assets/NewArrivalAssets/logos/streamline-plump_customer-support-7.png";
 
-
+/**
+ * Generic collection / listing page.
+ * You can reuse this for any category/collection by passing a filtered products array.
+ */
 const CollectionPage = ({
   title = "Collections",
   products = [],

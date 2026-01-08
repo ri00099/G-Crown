@@ -87,12 +87,20 @@ export default function Navbar() {
             <div className="flex items-center gap-2 lg:hidden">
               <IconButton
                 Icon={Heart}
-                onClick={() => navigate("/favorites")}
+                onClick={() => {
+                  navigate("/favorites")
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+
+                }}
                 badge={favorites.length}
               />
               <IconButton
                 Icon={ShoppingCart}
-                onClick={() => navigate("/cart")}
+                onClick={() => {
+                  navigate("/cart")
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+
+                }}
                 badge={getCartCount()}
               />
             </div>
@@ -101,22 +109,36 @@ export default function Navbar() {
             <div className="hidden lg:flex items-center gap-3 ">
               <IconButton
                 Icon={Heart}
-                onClick={() => navigate("/favorites")}
+                onClick={() =>{
+                  navigate("/favorites")
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
                 badge={favorites.length}
               />
               <IconButton
                 Icon={ShoppingCart}
-                onClick={() => navigate("/cart")}
+                onClick={() => {
+                  navigate("/cart")
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
                 badge={getCartCount()}
               />
               <IconButton
                 Icon={MapPin}
-                onClick={() => navigate("/track-order")}
+                onClick={() => {
+                  navigate("/track-order")
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                  
+                }}
               />
               {/* PROFILE ICON */}
               <IconButton
                 Icon={User}
-                onClick={() => navigate("/profile")}
+                onClick={() => {
+                  navigate("/profile")
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+
+                }}
               />
             </div>
           </div>

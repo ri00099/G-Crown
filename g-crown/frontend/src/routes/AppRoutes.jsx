@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 
+
 import Home from "../pages/homePage/Home";
 import SignIn from "../pages/auth/SignIn.jsx";
 import SignUp from "../pages/auth/SignUp.jsx";
@@ -19,12 +20,26 @@ import AboutUs from "../pages/aboutUs/AboutUs.jsx";
 import ProductDetails from "../pages/ProductDetails/ProductDetails.jsx";
 import Profile from "./../pages/Profile/Profile.jsx"
 
+
+
 import TrackingOrder from '../pages/trackOrder/TrackOrder.jsx'
 import TrackingForm from '../pages/trackOrder/TrackingForm.jsx'
 import Cart from '../pages/cart/Cart.jsx'
 import Favorites from '../pages/favorites/Favorites.jsx'
 import OrderSuccess from '../pages/orders/OrderSuccess.jsx'
 import OrderCancel from '../pages/orders/OrderCancel.jsx'
+
+import Checkout from "../pages/checkout/Checkout.jsx";
+import AdminDashboard from "../pages/admin/admin.jsx";
+import ContactUs from "../pages/contactus/ContactUs.jsx";
+import PrivacyPolicy from "../pages/legal/Privacy.jsx";
+import Terms from "../pages/terms/Terms.jsx";
+import Faq from "../pages/faqs/Faqs.jsx";
+import Verify from "../pages/auth/Verify.jsx";
+import ComingSoon from "../pages/auth/ComingSoon.jsx";
+
+
+
 
 
 
@@ -44,6 +59,9 @@ export default function AppRoutes() {
         <Route path="/" element={<Home />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/verify" element={<Verify />} />
+        <Route path="/coming-soon" element={<ComingSoon />} />
+        
 
         <Route path="/collections" element={<Collections />} />
         <Route path="/collections/engagement-rings" element={<EngagementRings />} />
@@ -55,6 +73,11 @@ export default function AppRoutes() {
         <Route path="/occasions" element={<Occasions />} />
         <Route path="/store" element={<Store />} />
         <Route path="/about" element={<AboutUs />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/contact" element={<ContactUs />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/faqs" element={<Faq />} />
 
         <Route path="/track-order" element={<TrackingForm />} />
         <Route path="/track-id" element={<TrackingOrder />} />
@@ -65,6 +88,8 @@ export default function AppRoutes() {
         <Route path="/order-success" element={<OrderSuccess />} />
         <Route path="/order-cancel" element={<OrderCancel />} />
     
+        <Route path="/checkout" element={<Checkout />} />
+
         <Route path="/profile" element={<Profile />} />
       </Routes>
 

@@ -12,7 +12,7 @@
 
     import bannerImage from '../../assets/occassions/bannerImg.jpg'
 
-    const Collections = () => {
+    export const Collections = () => {
       
 
       const MIN_LIMIT = 2500;
